@@ -3,13 +3,17 @@ from joblib import load
 import streamlit as st
 from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
 from nltk.tokenize import word_tokenize
+from nltk import download
 from sklearn.feature_extraction.text import TfidfVectorizer
 import json
+import os
+
+download('punkt')
 
 savedFolder = "saved2"
-rf_model = load(f'./{savedFolder}/saved_model/rf_model.joblib')
-svm_model = load(f'./{savedFolder}/saved_model/svm_model.joblib')
-Tfidf_vect = load(f'./{savedFolder}/saved_model/Tfidf_vect.joblib')
+rf_model = load(os.path.join(savedFolder, 'saved_model', 'rf_model.joblib'))
+svm_model = load(os.path.join(savedFolder, 'saved_model', 'svm_model.joblib'))
+Tfidf_vect = load(os.path.join(savedFolder, 'saved_model', 'Tfidf_vect.joblib'))
 
 st.title('Prediksi Berita Hoax')
 
@@ -53,7 +57,7 @@ def outputLabel(prediction):
     return "Bukan Berita Hoaks"
 
 def score_akurasi(model="SVM"):
-  with open(f'./{savedFolder}/saved_predictions_accuracy_score/accuracy_score.json', 'r') as jsonFile:
+  with open(os.path.join(savedFolder, 'saved_predictions_accuracy_score', 'accuracy_score.json'), 'r') as jsonFile:
     jf = jsonFile.read()
   try:
     data = json.loads(jf)
